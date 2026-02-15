@@ -1,4 +1,4 @@
-# Personal AI Employee - Bronze Tier Digital FTE
+# Personal AI Employee - Digital FTE
 
 > *Your life and business on autopilot. Local-first, agent-driven, human-in-the-loop.*
 
