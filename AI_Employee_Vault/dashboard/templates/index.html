@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Employee Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <h1>AI Employee <span>Nerve Center</span></h1>
+    <div class="header-right">
+        <span id="last-update">--</span>
+        <span class="refresh-indicator" id="refresh-dot"></span>
+        <span>Auto-refresh: 5s</span>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Dashboard Grid -->
+<div class="dashboard-grid">
+
+    <!-- Row 1: Status | Financial | Goals -->
+    <div class="card" id="card-status">
+        <div class="card-header">
+            <span class="card-title">System Status</span>
+        </div>
+        <div class="status-grid" id="status-grid">
+            <div class="status-item">
+                <div class="label">Watcher</div>
+                <div class="status-badge status-offline" id="status-watcher">
+                    <span class="status-dot"></span> Offline
+                </div>
+                <div class="last-check" id="check-watcher">--</div>
+            </div>
+            <div class="status-item">
+                <div class="label">Orchestrator</div>
+                <div class="status-badge status-offline" id="status-orchestrator">
+                    <span class="status-dot"></span> Offline
+                </div>
+                <div class="last-check" id="check-orchestrator">--</div>
+            </div>
+            <div class="status-item">
+                <div class="label">Claude Code</div>
+                <div class="status-badge status-offline" id="status-claude">
+                    <span class="status-dot"></span> Offline
+                </div>
+                <div class="last-check" id="check-claude">--</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" id="card-financial">
+        <div class="card-header">
+            <span class="card-title">Financial Summary</span>
+        </div>
+        <div class="fin-grid" id="fin-grid">
+            <div class="fin-item">
+                <div class="label">Bank Balance</div>
+                <div class="value neutral" id="fin-balance">$0.00</div>
+            </div>
+            <div class="fin-item">
+                <div class="label">MTD Revenue</div>
+                <div class="value positive" id="fin-revenue">$0.00</div>
+            </div>
+            <div class="fin-item">
+                <div class="label">MTD Expenses</div>
+                <div class="value negative" id="fin-expenses">$0.00</div>
+            </div>
+            <div class="fin-item">
+                <div class="label">Pending Invoices</div>
+                <div class="value neutral" id="fin-invoices">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" id="card-goals">
+        <div class="card-header">
+            <span class="card-title">Business Goals</span>
+        </div>
+        <div id="goals-content">
+            <div class="progress-bar-container">
+                <div class="progress-label">
+                    <span>Revenue Target</span>
+                    <span id="goals-revenue-text">$0 / $10,000</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="goals-revenue-bar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="metrics-grid" id="goals-metrics" style="margin-top: 12px;"></div>
+        </div>
+    </div>
+
+    <!-- Row 2: Queue Management (full width) -->
+    <div class="card card-full" id="card-queue">
+        <div class="card-header">
+            <span class="card-title">Queue Management</span>
+            <span class="card-badge" id="queue-total" style="background: var(--accent); color: var(--text-secondary);">0 items</span>
+        </div>
+        <div class="queue-grid" id="queue-grid"></div>
+        <div class="queue-detail" id="queue-detail">
+            <div class="queue-detail-header">
+                <h3 id="queue-detail-title">Folder</h3>
+                <button class="btn-close" onclick="closeQueueDetail()">&times;</button>
+            </div>
+            <div class="file-list" id="queue-detail-list"></div>
+        </div>
+    </div>
+
+    <!-- Row 3: Approvals | Plans -->
+    <div class="card" id="card-approvals" style="grid-column: span 1;">
+        <div class="card-header">
+            <span class="card-title">Pending Approvals</span>
+            <span class="card-badge" id="approval-count" style="background: var(--yellow); color: #1a1a2e;">0</span>
+        </div>
+        <div class="approval-list" id="approval-list">
+            <div class="empty-state">No items pending approval</div>
+        </div>
+    </div>
+
+    <div class="card" id="card-plans" style="grid-column: span 2;">
+        <div class="card-header">
+            <span class="card-title">Plans</span>
+            <span class="card-badge" id="plan-count" style="background: var(--blue); color: #1a1a2e;">0</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="plan-list" id="plan-list">
+                <div class="empty-state">No plans created yet</div>
+            </div>
+            <div class="plan-preview" id="plan-preview">Select a plan to preview</div>
+        </div>
+    </div>
+
+    <!-- Row 4: Activity Log (full width) -->
+    <div class="card card-full" id="card-logs">
+        <div class="card-header">
+            <span class="card-title">Activity Log</span>
+            <span class="card-badge" id="log-count" style="background: var(--accent); color: var(--text-secondary);">0</span>
+        </div>
+        <div class="log-table-wrapper">
+            <table class="log-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Actor</th>
+                        <th>Action</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody id="log-body">
+                    <tr><td colspan="4" class="empty-state">No log entries</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Row 5: Controls (full width) -->
+    <div class="card card-full" id="card-controls">
+        <div class="card-header">
+            <span class="card-title">Controls</span>
+        </div>
+        <div class="controls-bar">
+            <button class="btn btn-start" onclick="startProcess('watcher')">Start Watcher</button>
+            <button class="btn btn-start" onclick="startProcess('orchestrator')">Start Orchestrator</button>
+            <button class="btn btn-start" onclick="startProcess('all')">Start All</button>
+            <span class="divider"></span>
+            <button class="btn btn-stop" onclick="stopProcess('all')">Stop All</button>
+            <span class="divider"></span>
+            <button class="btn btn-secondary" onclick="refreshAll()">Refresh Now</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// ============ Configuration ============
+const REFRESH_INTERVAL = 5000;
+const WORKFLOW_FOLDERS = ['Inbox', 'Needs_Action', 'In_Progress', 'Done', 'Pending_Approval', 'Approved', 'Rejected'];
+
+// ============ Toast Notifications ============
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+// ============ Status Panel ============
+async function fetchStatus() {
+    try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+
+        // Update system status
+        for (const [key, info] of Object.entries(data.system_status)) {
+            const badge = document.getElementById(`status-${key}`);
+            const check = document.getElementById(`check-${key}`);
+            if (badge) {
+                badge.className = `status-badge status-${info.status}`;
+                const label = info.status.charAt(0).toUpperCase() + info.status.slice(1);
+                badge.innerHTML = `<span class="status-dot"></span> ${label}`;
+            }
+            if (check) {
+                check.textContent = info.last_check || '--';
+            }
+        }
+
+        // Update financial summary
+        const fin = data.financial || {};
+        setText('fin-balance', fin['Bank Balance'] || '$0.00');
+        setText('fin-revenue', fin['MTD Revenue'] || '$0.00');
+        setText('fin-expenses', fin['MTD Expenses'] || '$0.00');
+        setText('fin-invoices', fin['Pending Invoices'] || '0');
+
+        // Update queue counts
+        const counts = data.folder_counts || {};
+        renderQueueGrid(counts);
+
+        // Update timestamp
+        const now = new Date();
+        setText('last-update', now.toLocaleTimeString());
+
+    } catch (err) {
+        console.error('Status fetch failed:', err);
+    }
+}
+
+// ============ Queue Management ============
+function renderQueueGrid(counts) {
+    const grid = document.getElementById('queue-grid');
+    let total = 0;
+    let html = '';
+
+    for (const folder of WORKFLOW_FOLDERS) {
+        const count = counts[folder] || 0;
+        total += count;
+        const cls = count > 0 ? 'has-items' : 'empty';
+        html += `
+            <div class="queue-item ${cls}" onclick="showQueueDetail('${folder}')">
+                <div class="count">${count}</div>
+                <div class="folder-name">${folder.replace(/_/g, ' ')}</div>
+            </div>`;
+    }
+
+    grid.innerHTML = html;
+    setText('queue-total', `${total} items`);
+}
+
+async function showQueueDetail(folder) {
+    try {
+        const res = await fetch(`/api/queue/${folder}`);
+        const data = await res.json();
+
+        setText('queue-detail-title', folder.replace(/_/g, ' ') + ` (${data.count})`);
+
+        const list = document.getElementById('queue-detail-list');
+        if (data.items.length === 0) {
+            list.innerHTML = '<div class="empty-state">Empty folder</div>';
+        } else {
+            list.innerHTML = data.items.map(item => `
+                <div class="file-item">
+                    <span class="file-name">${escapeHtml(item.name)}</span>
+                    <span class="file-meta">${formatSize(item.size)} &middot; ${formatDate(item.modified)}</span>
+                </div>`).join('');
+        }
+
+        document.getElementById('queue-detail').classList.add('active');
+    } catch (err) {
+        console.error('Queue detail fetch failed:', err);
+    }
+}
+
+function closeQueueDetail() {
+    document.getElementById('queue-detail').classList.remove('active');
+}
+
+// ============ Approvals Panel ============
+async function fetchApprovals() {
+    try {
+        const res = await fetch('/api/approvals');
+        const data = await res.json();
+
+        setText('approval-count', String(data.count));
+        const list = document.getElementById('approval-list');
+
+        if (data.items.length === 0) {
+            list.innerHTML = '<div class="empty-state">No items pending approval</div>';
+            return;
+        }
+
+        list.innerHTML = data.items.map(item => `
+            <div class="approval-item">
+                <div class="item-name">${escapeHtml(item.name)}</div>
+                ${item.frontmatter ? `<div class="item-meta">Type: ${escapeHtml(item.frontmatter.type || 'unknown')} | Priority: ${escapeHtml(item.frontmatter.priority || 'medium')}</div>` : ''}
+                ${item.preview ? `<div class="item-preview">${escapeHtml(item.preview)}</div>` : ''}
+                <div class="approval-actions">
+                    <button class="btn btn-approve" onclick="approveItem('${escapeAttr(item.name)}')">Approve</button>
+                    <button class="btn btn-reject" onclick="rejectItem('${escapeAttr(item.name)}')">Reject</button>
+                </div>
+            </div>`).join('');
+    } catch (err) {
+        console.error('Approvals fetch failed:', err);
+    }
+}
+
+async function approveItem(filename) {
+    try {
+        const res = await fetch(`/api/approve/${encodeURIComponent(filename)}`, { method: 'POST' });
+        const data = await res.json();
+        if (res.ok) {
+            showToast(`Approved: ${filename}`, 'success');
+            refreshAll();
+        } else {
+            showToast(data.error || 'Approve failed', 'error');
+        }
+    } catch (err) {
+        showToast('Network error', 'error');
+    }
+}
+
+async function rejectItem(filename) {
+    try {
+        const res = await fetch(`/api/reject/${encodeURIComponent(filename)}`, { method: 'POST' });
+        const data = await res.json();
+        if (res.ok) {
+            showToast(`Rejected: ${filename}`, 'success');
+            refreshAll();
+        } else {
+            showToast(data.error || 'Reject failed', 'error');
+        }
+    } catch (err) {
+        showToast('Network error', 'error');
+    }
+}
+
+// ============ Plans Panel ============
+async function fetchPlans() {
+    try {
+        const res = await fetch('/api/plans');
+        const data = await res.json();
+
+        setText('plan-count', String(data.count));
+        const list = document.getElementById('plan-list');
+        const preview = document.getElementById('plan-preview');
+
+        if (data.plans.length === 0) {
+            list.innerHTML = '<div class="empty-state">No plans created yet</div>';
+            preview.classList.remove('active');
+            return;
+        }
+
+        list.innerHTML = data.plans.map((plan, i) => `
+            <div class="plan-item" onclick="showPlanPreview(${i})" data-index="${i}">
+                <div class="plan-name">${escapeHtml(plan.name)}</div>
+                <div class="plan-meta">${formatDate(plan.modified)}${plan.frontmatter.status ? ' | ' + escapeHtml(plan.frontmatter.status) : ''}</div>
+            </div>`).join('');
+
+        // Store plans data for preview
+        window._plans = data.plans;
+    } catch (err) {
+        console.error('Plans fetch failed:', err);
+    }
+}
+
+function showPlanPreview(index) {
+    const plan = window._plans && window._plans[index];
+    if (!plan) return;
+
+    const preview = document.getElementById('plan-preview');
+    preview.textContent = plan.preview || '(no content)';
+    preview.classList.add('active');
+
+    // Highlight active plan
+    document.querySelectorAll('.plan-item').forEach(el => el.classList.remove('active'));
+    const item = document.querySelector(`.plan-item[data-index="${index}"]`);
+    if (item) item.classList.add('active');
+}
+
+// ============ Goals Panel ============
+async function fetchGoals() {
+    try {
+        const res = await fetch('/api/goals');
+        const data = await res.json();
+
+        // Revenue progress bar
+        const target = parseFloat((data.revenue_target || '$10,000').replace(/[$,]/g, '')) || 10000;
+        const current = parseFloat((data.current_mtd || '$0').replace(/[$,]/g, '')) || 0;
+        const pct = Math.min(100, Math.round((current / target) * 100));
+
+        setText('goals-revenue-text', `${data.current_mtd || '$0'} / ${data.revenue_target || '$10,000'}`);
+        document.getElementById('goals-revenue-bar').style.width = pct + '%';
+
+        // Key metrics
+        const metricsGrid = document.getElementById('goals-metrics');
+        const metrics = data.metrics || [];
+        if (metrics.length > 0) {
+            metricsGrid.innerHTML = metrics.map(m => `
+                <div class="metric-item">
+                    <div class="metric-name">${escapeHtml(m.metric)}</div>
+                    <div class="metric-target">${escapeHtml(m.target)}</div>
+                </div>`).join('');
+        }
+    } catch (err) {
+        console.error('Goals fetch failed:', err);
+    }
+}
+
+// ============ Activity Log ============
+async function fetchLogs() {
+    try {
+        const res = await fetch('/api/logs');
+        const data = await res.json();
+
+        setText('log-count', String(data.count));
+        const body = document.getElementById('log-body');
+
+        if (data.logs.length === 0) {
+            body.innerHTML = '<tr><td colspan="4" class="empty-state">No log entries</td></tr>';
+            return;
+        }
+
+        body.innerHTML = data.logs.map(log => {
+            const details = typeof log.details === 'object'
+                ? Object.entries(log.details).map(([k,v]) => `${k}: ${v}`).join(', ')
+                : String(log.details || '');
+            return `
+                <tr>
+                    <td class="timestamp">${formatTimestamp(log.timestamp)}</td>
+                    <td class="actor">${escapeHtml(log.actor || log.watcher || '--')}</td>
+                    <td class="action-type">${escapeHtml(log.action_type || '--')}</td>
+                    <td class="details" title="${escapeAttr(details)}">${escapeHtml(details)}</td>
+                </tr>`;
+        }).join('');
+    } catch (err) {
+        console.error('Logs fetch failed:', err);
+    }
+}
+
+// ============ Process Controls ============
+async function startProcess(name) {
+    try {
+        const res = await fetch('/api/process/start', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name }),
+        });
+        const data = await res.json();
+        if (data.started && data.started.length > 0) {
+            showToast(`Started: ${data.started.join(', ')}`, 'success');
+        } else {
+            showToast('Already running', 'info');
+        }
+        setTimeout(fetchStatus, 500);
+    } catch (err) {
+        showToast('Failed to start process', 'error');
+    }
+}
+
+async function stopProcess(name) {
+    try {
+        const res = await fetch('/api/process/stop', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name }),
+        });
+        const data = await res.json();
+        if (data.stopped && data.stopped.length > 0) {
+            showToast(`Stopped: ${data.stopped.join(', ')}`, 'success');
+        } else {
+            showToast('Nothing to stop', 'info');
+        }
+        setTimeout(fetchStatus, 500);
+    } catch (err) {
+        showToast('Failed to stop process', 'error');
+    }
+}
+
+// ============ Helpers ============
+function setText(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+}
+
+function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+function escapeAttr(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+function formatDate(isoStr) {
+    if (!isoStr) return '--';
+    try {
+        const d = new Date(isoStr);
+        return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+    } catch { return isoStr; }
+}
+
+function formatTimestamp(ts) {
+    if (!ts) return '--';
+    try {
+        const d = new Date(ts);
+        return d.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+    } catch { return ts; }
+}
+
+// ============ Refresh Loop ============
+async function refreshAll() {
+    await Promise.all([
+        fetchStatus(),
+        fetchApprovals(),
+        fetchPlans(),
+        fetchGoals(),
+        fetchLogs(),
+    ]);
+}
+
+// Initial load
+refreshAll();
+
+// Auto-refresh
+setInterval(refreshAll, REFRESH_INTERVAL);
+</script>
+
+</body>
+</html>

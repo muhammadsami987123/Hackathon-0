@@ -1,0 +1,58 @@
+# Environment & Secrets
+.env
+.env.local
+.env.production
+credentials.json
+token.json
+*.key
+*.pem
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# WhatsApp session data
+whatsapp_session/
+
+# Obsidian internal
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+
+# Log files (keep structure, ignore contents)
+AI_Employee_Vault/Logs/*.json
+AI_Employee_Vault/Logs/*.log
+
+# Temporary files
+*.tmp
+*.bak
+
+# Playwright MCP logs
+.playwright-mcp/
+
+# Claude local settings
+.claude/settings.local.json
