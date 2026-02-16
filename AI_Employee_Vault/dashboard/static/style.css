@@ -603,6 +603,214 @@ body {
     to { opacity: 0; }
 }
 
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 250px;
+    height: 100vh;
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    z-index: 100;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+}
+
+.sidebar-header h2 {
+    color: var(--highlight);
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+}
+
+.sidebar-header p {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.sidebar-nav {
+    padding: 0 10px;
+}
+
+.nav-section {
+    margin-bottom: 20px;
+}
+
+.nav-section-title {
+    display: block;
+    padding: 8px 12px;
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+}
+
+.nav-item:hover {
+    background: var(--accent);
+    color: var(--text-primary);
+}
+
+.nav-item.active {
+    background: var(--accent);
+    color: var(--text-primary);
+    border-left: 3px solid var(--highlight);
+}
+
+.nav-icon {
+    margin-right: 10px;
+    font-size: 1rem;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    min-height: 100vh;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.tier-indicator {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.tier-bronze {
+    background: var(--yellow);
+    color: #1a1a2e;
+}
+
+.tier-silver {
+    background: var(--blue);
+    color: #1a1a2e;
+}
+
+.tier-both {
+    background: linear-gradient(45deg, var(--yellow), var(--blue));
+    color: #1a1a2e;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.dashboard-section {
+    padding: 20px;
+    max-width: 1600px;
+    margin: 0 auto;
+    min-height: calc(100vh - 80px); /* Account for header */
+}
+
+/* Unique styling for different sections */
+#overview-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 20px;
+}
+
+#bronze-status-section {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(22, 33, 62, 0.9));
+    border-radius: 12px;
+    padding: 25px;
+}
+
+#bronze-queue-section {
+    background: linear-gradient(135deg, rgba(15, 52, 96, 0.1), rgba(26, 26, 46, 0.1));
+    border-radius: 12px;
+    padding: 25px;
+}
+
+#silver-status-section {
+    background: linear-gradient(135deg, rgba(14, 168, 183, 0.1), rgba(15, 52, 96, 0.1));
+    border-radius: 12px;
+    padding: 25px;
+}
+
+#silver-approvals-section {
+    background: linear-gradient(135deg, rgba(233, 69, 96, 0.1), rgba(14, 168, 183, 0.1));
+    border-radius: 12px;
+    padding: 25px;
+}
+
+#silver-plans-section {
+    background: linear-gradient(135deg, rgba(78, 204, 163, 0.1), rgba(78, 168, 222, 0.1));
+    border-radius: 12px;
+    padding: 25px;
+}
+
+#silver-financial-section {
+    background: linear-gradient(135deg, rgba(240, 230, 140, 0.1), rgba(78, 204, 163, 0.1));
+    border-radius: 12px;
+    padding: 25px;
+}
+
+#silver-goals-section {
+    background: linear-gradient(135deg, rgba(78, 168, 222, 0.1), rgba(240, 230, 140, 0.1));
+    border-radius: 12px;
+    padding: 25px;
+}
+
+#bronze-logs-section {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.1), rgba(15, 52, 96, 0.1));
+    border-radius: 12px;
+    padding: 25px;
+}
+
+#controls-section {
+    background: linear-gradient(135deg, rgba(240, 230, 140, 0.2), rgba(78, 168, 222, 0.2));
+    border-radius: 12px;
+    padding: 25px;
+}
+
+/* Enhance the layout of individual sections */
+#bronze-status-section .card,
+#silver-status-section .card {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(14, 168, 183, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+#silver-approvals-section .card,
+#silver-plans-section .card {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(233, 69, 96, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+#silver-financial-section .card,
+#silver-goals-section .card {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(78, 204, 163, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 6px;

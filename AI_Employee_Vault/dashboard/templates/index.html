@@ -8,179 +8,699 @@
 </head>
 <body>
 
-<!-- Header -->
-<div class="header">
-    <h1>AI Employee <span>Nerve Center</span></h1>
-    <div class="header-right">
-        <span id="last-update">--</span>
-        <span class="refresh-indicator" id="refresh-dot"></span>
-        <span>Auto-refresh: 5s</span>
+<!-- Sidebar Navigation -->
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h2>AI Employee</h2>
+        <p>Management Center</p>
     </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-section">
+            <span class="nav-section-title">Dashboard</span>
+            <a href="#" class="nav-item active" data-view="overview">
+                <span class="nav-icon">📊</span>
+                <span>Overview</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-section-title">Bronze Tier</span>
+            <a href="#" class="nav-item" data-view="bronze-status">
+                <span class="nav-icon">🟢</span>
+                <span>System Status</span>
+            </a>
+            <a href="#" class="nav-item" data-view="bronze-queue">
+                <span class="nav-icon">📋</span>
+                <span>Queue Management</span>
+            </a>
+            <a href="#" class="nav-item" data-view="bronze-logs">
+                <span class="nav-icon">📝</span>
+                <span>Activity Log</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-section-title">Silver Tier</span>
+            <a href="#" class="nav-item" data-view="silver-status">
+                <span class="nav-icon">🔵</span>
+                <span>Enhanced Status</span>
+            </a>
+            <a href="#" class="nav-item" data-view="silver-approvals">
+                <span class="nav-icon">✅</span>
+                <span>Approvals</span>
+            </a>
+            <a href="#" class="nav-item" data-view="silver-plans">
+                <span class="nav-icon">📋</span>
+                <span>Plans</span>
+            </a>
+            <a href="#" class="nav-item" data-view="silver-financial">
+                <span class="nav-icon">💰</span>
+                <span>Financial</span>
+            </a>
+            <a href="#" class="nav-item" data-view="silver-goals">
+                <span class="nav-icon">🎯</span>
+                <span>Goals</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-section-title">Controls</span>
+            <a href="#" class="nav-item" data-view="controls">
+                <span class="nav-icon">⚙️</span>
+                <span>System Controls</span>
+            </a>
+        </div>
+    </nav>
 </div>
 
-<!-- Toast Container -->
-<div class="toast-container" id="toast-container"></div>
-
-<!-- Dashboard Grid -->
-<div class="dashboard-grid">
-
-    <!-- Row 1: Status | Financial | Goals -->
-    <div class="card" id="card-status">
-        <div class="card-header">
-            <span class="card-title">System Status</span>
+<!-- Main Content Area -->
+<div class="main-content">
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <h1 id="page-title">AI Employee Overview</h1>
+            <div class="tier-indicator">
+                <span id="current-tier" class="tier-bronze">Bronze Tier</span>
+            </div>
         </div>
-        <div class="status-grid" id="status-grid">
-            <div class="status-item">
-                <div class="label">Watcher</div>
-                <div class="status-badge status-offline" id="status-watcher">
-                    <span class="status-dot"></span> Offline
-                </div>
-                <div class="last-check" id="check-watcher">--</div>
-            </div>
-            <div class="status-item">
-                <div class="label">Orchestrator</div>
-                <div class="status-badge status-offline" id="status-orchestrator">
-                    <span class="status-dot"></span> Offline
-                </div>
-                <div class="last-check" id="check-orchestrator">--</div>
-            </div>
-            <div class="status-item">
-                <div class="label">Claude Code</div>
-                <div class="status-badge status-offline" id="status-claude">
-                    <span class="status-dot"></span> Offline
-                </div>
-                <div class="last-check" id="check-claude">--</div>
-            </div>
+        <div class="header-right">
+            <span id="last-update">--</span>
+            <span class="refresh-indicator" id="refresh-dot"></span>
+            <span>Auto-refresh: 5s</span>
         </div>
     </div>
 
-    <div class="card" id="card-financial">
-        <div class="card-header">
-            <span class="card-title">Financial Summary</span>
-        </div>
-        <div class="fin-grid" id="fin-grid">
-            <div class="fin-item">
-                <div class="label">Bank Balance</div>
-                <div class="value neutral" id="fin-balance">$0.00</div>
-            </div>
-            <div class="fin-item">
-                <div class="label">MTD Revenue</div>
-                <div class="value positive" id="fin-revenue">$0.00</div>
-            </div>
-            <div class="fin-item">
-                <div class="label">MTD Expenses</div>
-                <div class="value negative" id="fin-expenses">$0.00</div>
-            </div>
-            <div class="fin-item">
-                <div class="label">Pending Invoices</div>
-                <div class="value neutral" id="fin-invoices">0</div>
-            </div>
-        </div>
-    </div>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
 
-    <div class="card" id="card-goals">
-        <div class="card-header">
-            <span class="card-title">Business Goals</span>
-        </div>
-        <div id="goals-content">
-            <div class="progress-bar-container">
-                <div class="progress-label">
-                    <span>Revenue Target</span>
-                    <span id="goals-revenue-text">$0 / $10,000</span>
+    <!-- Dashboard Grid (Overview Section) -->
+    <div class="dashboard-grid" id="overview-section">
+        <!-- Row 1: Status | Financial | Goals -->
+        <div class="card" id="overview-card-status">
+            <div class="card-header">
+                <span class="card-title">System Status</span>
+            </div>
+            <div class="status-grid" id="overview-status-grid">
+                <div class="status-item">
+                    <div class="label">Watcher</div>
+                    <div class="status-badge status-offline" id="overview-status-watcher">
+                        <span class="status-dot"></span> Offline
+                    </div>
+                    <div class="last-check" id="overview-check-watcher">--</div>
                 </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="goals-revenue-bar" style="width: 0%"></div>
+                <div class="status-item">
+                    <div class="label">Orchestrator</div>
+                    <div class="status-badge status-offline" id="overview-status-orchestrator">
+                        <span class="status-dot"></span> Offline
+                    </div>
+                    <div class="last-check" id="overview-check-orchestrator">--</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">Claude Code</div>
+                    <div class="status-badge status-offline" id="overview-status-claude">
+                        <span class="status-dot"></span> Offline
+                    </div>
+                    <div class="last-check" id="overview-check-claude">--</div>
                 </div>
             </div>
-            <div class="metrics-grid" id="goals-metrics" style="margin-top: 12px;"></div>
         </div>
-    </div>
 
-    <!-- Row 2: Queue Management (full width) -->
-    <div class="card card-full" id="card-queue">
-        <div class="card-header">
-            <span class="card-title">Queue Management</span>
-            <span class="card-badge" id="queue-total" style="background: var(--accent); color: var(--text-secondary);">0 items</span>
-        </div>
-        <div class="queue-grid" id="queue-grid"></div>
-        <div class="queue-detail" id="queue-detail">
-            <div class="queue-detail-header">
-                <h3 id="queue-detail-title">Folder</h3>
-                <button class="btn-close" onclick="closeQueueDetail()">&times;</button>
+        <div class="card" id="overview-card-financial">
+            <div class="card-header">
+                <span class="card-title">Financial Summary</span>
             </div>
-            <div class="file-list" id="queue-detail-list"></div>
-        </div>
-    </div>
-
-    <!-- Row 3: Approvals | Plans -->
-    <div class="card" id="card-approvals" style="grid-column: span 1;">
-        <div class="card-header">
-            <span class="card-title">Pending Approvals</span>
-            <span class="card-badge" id="approval-count" style="background: var(--yellow); color: #1a1a2e;">0</span>
-        </div>
-        <div class="approval-list" id="approval-list">
-            <div class="empty-state">No items pending approval</div>
-        </div>
-    </div>
-
-    <div class="card" id="card-plans" style="grid-column: span 2;">
-        <div class="card-header">
-            <span class="card-title">Plans</span>
-            <span class="card-badge" id="plan-count" style="background: var(--blue); color: #1a1a2e;">0</span>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-            <div class="plan-list" id="plan-list">
-                <div class="empty-state">No plans created yet</div>
+            <div class="fin-grid" id="overview-fin-grid">
+                <div class="fin-item">
+                    <div class="label">Bank Balance</div>
+                    <div class="value neutral" id="overview-fin-balance">$0.00</div>
+                </div>
+                <div class="fin-item">
+                    <div class="label">MTD Revenue</div>
+                    <div class="value positive" id="overview-fin-revenue">$0.00</div>
+                </div>
+                <div class="fin-item">
+                    <div class="label">MTD Expenses</div>
+                    <div class="value negative" id="overview-fin-expenses">$0.00</div>
+                </div>
+                <div class="fin-item">
+                    <div class="label">Pending Invoices</div>
+                    <div class="value neutral" id="overview-fin-invoices">0</div>
+                </div>
             </div>
-            <div class="plan-preview" id="plan-preview">Select a plan to preview</div>
+        </div>
+
+        <div class="card" id="overview-card-goals">
+            <div class="card-header">
+                <span class="card-title">Business Goals</span>
+            </div>
+            <div id="overview-goals-content">
+                <div class="progress-bar-container">
+                    <div class="progress-label">
+                        <span>Revenue Target</span>
+                        <span id="overview-goals-revenue-text">$0 / $10,000</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="overview-goals-revenue-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="metrics-grid" id="overview-goals-metrics" style="margin-top: 12px;"></div>
+            </div>
+        </div>
+
+        <!-- Row 2: Queue Management (full width) -->
+        <div class="card card-full" id="overview-card-queue">
+            <div class="card-header">
+                <span class="card-title">Queue Management</span>
+                <span class="card-badge" id="overview-queue-total" style="background: var(--accent); color: var(--text-secondary);">0 items</span>
+            </div>
+            <div class="queue-grid" id="overview-queue-grid"></div>
+            <div class="queue-detail" id="overview-queue-detail">
+                <div class="queue-detail-header">
+                    <h3 id="overview-queue-detail-title">Folder</h3>
+                    <button class="btn-close" onclick="closeOverviewQueueDetail()">&times;</button>
+                </div>
+                <div class="file-list" id="overview-queue-detail-list"></div>
+            </div>
+        </div>
+
+        <!-- Row 3: Approvals | Plans -->
+        <div class="card" id="overview-card-approvals" style="grid-column: span 1;">
+            <div class="card-header">
+                <span class="card-title">Pending Approvals</span>
+                <span class="card-badge" id="overview-approval-count" style="background: var(--yellow); color: #1a1a2e;">0</span>
+            </div>
+            <div class="approval-list" id="overview-approval-list">
+                <div class="empty-state">No items pending approval</div>
+            </div>
+        </div>
+
+        <div class="card" id="overview-card-plans" style="grid-column: span 2;">
+            <div class="card-header">
+                <span class="card-title">Plans</span>
+                <span class="card-badge" id="overview-plan-count" style="background: var(--blue); color: #1a1a2e;">0</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="plan-list" id="overview-plan-list">
+                    <div class="empty-state">No plans created yet</div>
+                </div>
+                <div class="plan-preview" id="overview-plan-preview">Select a plan to preview</div>
+            </div>
+        </div>
+
+        <!-- Row 4: Activity Log (full width) -->
+        <div class="card card-full" id="overview-card-logs">
+            <div class="card-header">
+                <span class="card-title">Activity Log</span>
+                <span class="card-badge" id="overview-log-count" style="background: var(--accent); color: var(--text-secondary);">0</span>
+            </div>
+            <div class="log-table-wrapper">
+                <table class="log-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Actor</th>
+                            <th>Action</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="overview-log-body">
+                        <tr><td colspan="4" class="empty-state">No log entries</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Row 5: Controls (full width) -->
+        <div class="card card-full" id="overview-card-controls">
+            <div class="card-header">
+                <span class="card-title">Controls</span>
+            </div>
+            <div class="controls-bar">
+                <button class="btn btn-start" onclick="startProcess('watcher')">Start Watcher</button>
+                <button class="btn btn-start" onclick="startProcess('orchestrator')">Start Orchestrator</button>
+                <button class="btn btn-start" onclick="startProcess('all')">Start All</button>
+                <span class="divider"></span>
+                <button class="btn btn-stop" onclick="stopProcess('all')">Stop All</button>
+                <span class="divider"></span>
+                <button class="btn btn-secondary" onclick="refreshAll()">Refresh Now</button>
+            </div>
         </div>
     </div>
 
-    <!-- Row 4: Activity Log (full width) -->
-    <div class="card card-full" id="card-logs">
-        <div class="card-header">
-            <span class="card-title">Activity Log</span>
-            <span class="card-badge" id="log-count" style="background: var(--accent); color: var(--text-secondary);">0</span>
-        </div>
-        <div class="log-table-wrapper">
-            <table class="log-table">
-                <thead>
-                    <tr>
-                        <th>Timestamp</th>
-                        <th>Actor</th>
-                        <th>Action</th>
-                        <th>Details</th>
-                    </tr>
-                </thead>
-                <tbody id="log-body">
-                    <tr><td colspan="4" class="empty-state">No log entries</td></tr>
-                </tbody>
-            </table>
+
+</div>
+
+    <!-- Hidden Sections for Navigation -->
+    <div id="bronze-status-section" class="dashboard-section hidden">
+        <div class="card" id="bronze-card-status">
+            <div class="card-header">
+                <span class="card-title">System Status</span>
+            </div>
+            <div class="status-grid" id="bronze-status-grid">
+                <div class="status-item">
+                    <div class="label">Watcher</div>
+                    <div class="status-badge status-offline" id="bronze-status-watcher">
+                        <span class="status-dot"></span> Offline
+                    </div>
+                    <div class="last-check" id="bronze-check-watcher">--</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">Orchestrator</div>
+                    <div class="status-badge status-offline" id="bronze-status-orchestrator">
+                        <span class="status-dot"></span> Offline
+                    </div>
+                    <div class="last-check" id="bronze-check-orchestrator">--</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">Claude Code</div>
+                    <div class="status-badge status-offline" id="bronze-status-claude">
+                        <span class="status-dot"></span> Offline
+                    </div>
+                    <div class="last-check" id="bronze-check-claude">--</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Row 5: Controls (full width) -->
-    <div class="card card-full" id="card-controls">
-        <div class="card-header">
-            <span class="card-title">Controls</span>
-        </div>
-        <div class="controls-bar">
-            <button class="btn btn-start" onclick="startProcess('watcher')">Start Watcher</button>
-            <button class="btn btn-start" onclick="startProcess('orchestrator')">Start Orchestrator</button>
-            <button class="btn btn-start" onclick="startProcess('all')">Start All</button>
-            <span class="divider"></span>
-            <button class="btn btn-stop" onclick="stopProcess('all')">Stop All</button>
-            <span class="divider"></span>
-            <button class="btn btn-secondary" onclick="refreshAll()">Refresh Now</button>
+    <div id="bronze-queue-section" class="dashboard-section hidden">
+        <div class="card card-full" id="bronze-card-queue">
+            <div class="card-header">
+                <span class="card-title">Queue Management</span>
+                <span class="card-badge" id="bronze-queue-total" style="background: var(--accent); color: var(--text-secondary);">0 items</span>
+            </div>
+            <div class="queue-grid" id="bronze-queue-grid"></div>
+            <div class="queue-detail" id="bronze-queue-detail">
+                <div class="queue-detail-header">
+                    <h3 id="bronze-queue-detail-title">Folder</h3>
+                    <button class="btn-close" onclick="closeBronzeQueueDetail()">&times;</button>
+                </div>
+                <div class="file-list" id="bronze-queue-detail-list"></div>
+            </div>
         </div>
     </div>
 
+    <div id="silver-status-section" class="dashboard-section hidden">
+        <div class="card" id="silver-card-status">
+            <div class="card-header">
+                <span class="card-title">Enhanced System Status</span>
+            </div>
+            <div class="status-grid" id="silver-status-grid">
+                <div class="status-item">
+                    <div class="label">File Watcher</div>
+                    <div class="status-badge status-offline" id="silver-status-filewatcher">
+                        <span class="status-dot"></span> Offline
+                    </div>
+                    <div class="last-check" id="silver-check-filewatcher">--</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">Gmail Watcher</div>
+                    <div class="status-badge status-offline" id="silver-status-gmailwatcher">
+                        <span class="status-dot"></span> Offline
+                    </div>
+                    <div class="last-check" id="silver-check-gmailwatcher">--</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">WhatsApp Watcher</div>
+                    <div class="status-badge status-offline" id="silver-status-whatsappwatcher">
+                        <span class="status-dot"></span> Offline
+                    </div>
+                    <div class="last-check" id="silver-check-whatsappwatcher">--</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">LinkedIn Watcher</div>
+                    <div class="status-badge status-offline" id="silver-status-linkedinwatcher">
+                        <span class="status-dot"></span> Offline
+                    </div>
+                    <div class="last-check" id="silver-check-linkedinwatcher">--</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">Orchestrator</div>
+                    <div class="status-badge status-offline" id="silver-status-orchestrator-silver">
+                        <span class="status-dot"></span> Offline
+                    </div>
+                    <div class="last-check" id="silver-check-orchestrator-silver">--</div>
+                </div>
+                <div class="status-item">
+                    <div class="label">Claude Code</div>
+                    <div class="status-badge status-offline" id="silver-status-claude-silver">
+                        <span class="status-dot"></span> Offline
+                    </div>
+                    <div class="last-check" id="silver-check-claude-silver">--</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="silver-approvals-section" class="dashboard-section hidden">
+        <div class="card" id="silver-card-approvals" style="grid-column: span 1;">
+            <div class="card-header">
+                <span class="card-title">Pending Approvals</span>
+                <span class="card-badge" id="silver-approval-count" style="background: var(--yellow); color: #1a1a2e;">0</span>
+            </div>
+            <div class="approval-list" id="silver-approval-list">
+                <div class="empty-state">No items pending approval</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="silver-plans-section" class="dashboard-section hidden">
+        <div class="card" id="silver-card-plans" style="grid-column: span 2;">
+            <div class="card-header">
+                <span class="card-title">Plans</span>
+                <span class="card-badge" id="silver-plan-count" style="background: var(--blue); color: #1a1a2e;">0</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="plan-list" id="silver-plan-list">
+                    <div class="empty-state">No plans created yet</div>
+                </div>
+                <div class="plan-preview" id="silver-plan-preview">Select a plan to preview</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="silver-financial-section" class="dashboard-section hidden">
+        <div class="card" id="silver-card-financial">
+            <div class="card-header">
+                <span class="card-title">Financial Summary</span>
+            </div>
+            <div class="fin-grid" id="silver-fin-grid">
+                <div class="fin-item">
+                    <div class="label">Bank Balance</div>
+                    <div class="value neutral" id="silver-fin-balance">$0.00</div>
+                </div>
+                <div class="fin-item">
+                    <div class="label">MTD Revenue</div>
+                    <div class="value positive" id="silver-fin-revenue">$0.00</div>
+                </div>
+                <div class="fin-item">
+                    <div class="label">MTD Expenses</div>
+                    <div class="value negative" id="silver-fin-expenses">$0.00</div>
+                </div>
+                <div class="fin-item">
+                    <div class="label">Pending Invoices</div>
+                    <div class="value neutral" id="silver-fin-invoices">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="silver-goals-section" class="dashboard-section hidden">
+        <div class="card" id="silver-card-goals">
+            <div class="card-header">
+                <span class="card-title">Business Goals</span>
+            </div>
+            <div id="silver-goals-content">
+                <div class="progress-bar-container">
+                    <div class="progress-label">
+                        <span>Revenue Target</span>
+                        <span id="silver-goals-revenue-text">$0 / $10,000</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="silver-goals-revenue-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="metrics-grid" id="silver-goals-metrics" style="margin-top: 12px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bronze-logs-section" class="dashboard-section hidden">
+        <div class="card card-full" id="bronze-card-logs">
+            <div class="card-header">
+                <span class="card-title">Activity Log</span>
+                <span class="card-badge" id="bronze-log-count" style="background: var(--accent); color: var(--text-secondary);">0</span>
+            </div>
+            <div class="log-table-wrapper">
+                <table class="log-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Actor</th>
+                            <th>Action</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bronze-log-body">
+                        <tr><td colspan="4" class="empty-state">No log entries</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="controls-section" class="dashboard-section hidden">
+        <div class="card card-full" id="controls-card-controls">
+            <div class="card-header">
+                <span class="card-title">System Controls</span>
+            </div>
+            <div class="controls-bar">
+                <button class="btn btn-start" onclick="startProcess('watcher')">Start Watcher</button>
+                <button class="btn btn-start" onclick="startProcess('orchestrator')">Start Orchestrator</button>
+                <button class="btn btn-start" onclick="startProcess('all')">Start All</button>
+                <span class="divider"></span>
+                <button class="btn btn-stop" onclick="stopProcess('all')">Stop All</button>
+                <span class="divider"></span>
+                <button class="btn btn-secondary" onclick="refreshAll()">Refresh Now</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
 // ============ Configuration ============
 const REFRESH_INTERVAL = 5000;
 const WORKFLOW_FOLDERS = ['Inbox', 'Needs_Action', 'In_Progress', 'Done', 'Pending_Approval', 'Approved', 'Rejected'];
+
+// Current view management
+let currentView = 'overview';
+
+// ============ Sidebar Navigation ============
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click listeners to navigation items
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const view = this.getAttribute('data-view');
+            showView(view);
+        });
+    });
+
+    // Initialize with overview
+    showView('overview');
+});
+
+function showView(view) {
+    // Update navigation active state
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    const activeItem = document.querySelector(`[data-view="${view}"]`);
+    if (activeItem) {
+        activeItem.classList.add('active');
+    }
+
+    // Hide all sections including the overview grid
+    document.querySelectorAll('.dashboard-section').forEach(section => {
+        section.classList.add('hidden');
+    });
+    document.getElementById('overview-section').classList.add('hidden');
+
+    // Show the selected section
+    switch(view) {
+        case 'overview':
+            document.getElementById('page-title').textContent = 'AI Employee Overview';
+            document.getElementById('current-tier').textContent = 'Bronze + Silver';
+            document.getElementById('current-tier').className = 'tier-both';
+            document.getElementById('overview-section').classList.remove('hidden');
+            refreshAll(); // Refresh all data
+            break;
+        case 'bronze-status':
+            document.getElementById('page-title').textContent = 'Bronze Tier - System Status';
+            document.getElementById('current-tier').textContent = 'Bronze Tier';
+            document.getElementById('current-tier').className = 'tier-bronze';
+            document.getElementById('bronze-status-section').classList.remove('hidden');
+            fetchStatus(); // Only fetch status
+            break;
+        case 'bronze-queue':
+            document.getElementById('page-title').textContent = 'Bronze Tier - Queue Management';
+            document.getElementById('current-tier').textContent = 'Bronze Tier';
+            document.getElementById('current-tier').className = 'tier-bronze';
+            document.getElementById('bronze-queue-section').classList.remove('hidden');
+            fetchStatus(); // Fetch queue counts
+            break;
+        case 'silver-status':
+            document.getElementById('page-title').textContent = 'Silver Tier - Enhanced Status';
+            document.getElementById('current-tier').textContent = 'Silver Tier';
+            document.getElementById('current-tier').className = 'tier-silver';
+            document.getElementById('silver-status-section').classList.remove('hidden');
+            fetchEnhancedStatus(); // Fetch enhanced status
+            break;
+        case 'silver-approvals':
+            document.getElementById('page-title').textContent = 'Silver Tier - Pending Approvals';
+            document.getElementById('current-tier').textContent = 'Silver Tier';
+            document.getElementById('current-tier').className = 'tier-silver';
+            document.getElementById('silver-approvals-section').classList.remove('hidden');
+            fetchApprovals(); // Fetch approvals
+            break;
+        case 'silver-plans':
+            document.getElementById('page-title').textContent = 'Silver Tier - Plans';
+            document.getElementById('current-tier').textContent = 'Silver Tier';
+            document.getElementById('current-tier').className = 'tier-silver';
+            document.getElementById('silver-plans-section').classList.remove('hidden');
+            fetchPlans(); // Fetch plans
+            break;
+        case 'silver-financial':
+            document.getElementById('page-title').textContent = 'Silver Tier - Financial Summary';
+            document.getElementById('current-tier').textContent = 'Silver Tier';
+            document.getElementById('current-tier').className = 'tier-silver';
+            document.getElementById('silver-financial-section').classList.remove('hidden');
+            fetchStatus(); // Fetch financial data
+            break;
+        case 'silver-goals':
+            document.getElementById('page-title').textContent = 'Silver Tier - Business Goals';
+            document.getElementById('current-tier').textContent = 'Silver Tier';
+            document.getElementById('current-tier').className = 'tier-silver';
+            document.getElementById('silver-goals-section').classList.remove('hidden');
+            fetchGoals(); // Fetch goals
+            break;
+        case 'bronze-logs':
+            document.getElementById('page-title').textContent = 'Bronze Tier - Activity Log';
+            document.getElementById('current-tier').textContent = 'Bronze Tier';
+            document.getElementById('current-tier').className = 'tier-bronze';
+            document.getElementById('bronze-logs-section').classList.remove('hidden');
+            fetchLogs(); // Fetch logs
+            break;
+        case 'controls':
+            document.getElementById('page-title').textContent = 'System Controls';
+            document.getElementById('current-tier').textContent = 'All Tiers';
+            document.getElementById('current-tier').className = 'tier-both';
+            document.getElementById('controls-section').classList.remove('hidden');
+            fetchStatus(); // Fetch status for controls
+            break;
+    }
+
+    currentView = view;
+}
+
+// ============ Enhanced Status Fetch ============
+async function fetchEnhancedStatus() {
+    try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+
+        // Update enhanced system status - including all watchers
+        // Define standard status mapping for different process types
+        const statusMapping = {
+            'watcher': 'filewatcher',
+            'gmail': 'gmailwatcher',
+            'whatsapp': 'whatsappwatcher',
+            'linkedin': 'linkedinwatcher',
+            'orchestrator': 'orchestrator-silver',
+            'claude': 'claude-silver'
+        };
+
+        for (const [key, info] of Object.entries(data.system_status)) {
+            const label = info.status.charAt(0).toUpperCase() + info.status.slice(1);
+            const statusHtml = `<span class="status-dot"></span> ${label}`;
+
+            // Update regular status element if exists (Bronze tier)
+            const badge = document.getElementById(`status-${key}`);
+            const check = document.getElementById(`check-${key}`);
+            if (badge) {
+                badge.className = `status-badge status-${info.status}`;
+                badge.innerHTML = statusHtml;
+            }
+            if (check) check.textContent = info.last_check || '--';
+
+            // Update overview section elements
+            const overviewBadge = document.getElementById(`overview-status-${key}`);
+            const overviewCheck = document.getElementById(`overview-check-${key}`);
+            if (overviewBadge) {
+                overviewBadge.className = `status-badge status-${info.status}`;
+                overviewBadge.innerHTML = statusHtml;
+            }
+            if (overviewCheck) {
+                overviewCheck.textContent = info.last_check || '--';
+            }
+
+            // Update bronze section elements
+            const bronzeBadge = document.getElementById(`bronze-status-${key}`);
+            const bronzeCheck = document.getElementById(`bronze-check-${key}`);
+            if (bronzeBadge) {
+                bronzeBadge.className = `status-badge status-${info.status}`;
+                bronzeBadge.innerHTML = statusHtml;
+            }
+            if (bronzeCheck) {
+                bronzeCheck.textContent = info.last_check || '--';
+            }
+
+            // Determine the enhanced key name to use
+            const enhancedKeyName = statusMapping[key] || `${key}watcher`;
+            const enhancedBadge = document.getElementById(`status-${enhancedKeyName}`);
+            const enhancedCheck = document.getElementById(`check-${enhancedKeyName}`);
+
+            if (enhancedBadge) {
+                enhancedBadge.className = `status-badge status-${info.status}`;
+                enhancedBadge.innerHTML = statusHtml;
+            }
+            if (enhancedCheck) enhancedCheck.textContent = info.last_check || '--';
+
+            // Also update Silver specific section elements
+            const silverSpecificBadge = document.getElementById(`silver-status-${enhancedKeyName}`);
+            const silverSpecificCheck = document.getElementById(`silver-check-${enhancedKeyName}`);
+
+            if (silverSpecificBadge) {
+                silverSpecificBadge.className = `status-badge status-${info.status}`;
+                silverSpecificBadge.innerHTML = statusHtml;
+            }
+            if (silverSpecificCheck) {
+                silverSpecificCheck.textContent = info.last_check || '--';
+            }
+        }
+
+        // Update financial summary (all tiers)
+        const fin = data.financial || {};
+        setText('fin-balance', fin['Bank Balance'] || '$0.00');
+        setText('fin-revenue', fin['MTD Revenue'] || '$0.00');
+        setText('fin-expenses', fin['MTD Expenses'] || '$0.00');
+        setText('fin-invoices', fin['Pending Invoices'] || '0');
+
+        // Update overview financial elements
+        setText('overview-fin-balance', fin['Bank Balance'] || '$0.00');
+        setText('overview-fin-revenue', fin['MTD Revenue'] || '$0.00');
+        setText('overview-fin-expenses', fin['MTD Expenses'] || '$0.00');
+        setText('overview-fin-invoices', fin['Pending Invoices'] || '0');
+
+        // Update bronze financial elements
+        setText('bronze-fin-balance', fin['Bank Balance'] || '$0.00');
+        setText('bronze-fin-revenue', fin['MTD Revenue'] || '$0.00');
+        setText('bronze-fin-expenses', fin['MTD Expenses'] || '$0.00');
+        setText('bronze-fin-invoices', fin['Pending Invoices'] || '0');
+
+        // Update silver financial elements
+        setText('silver-fin-balance', fin['Bank Balance'] || '$0.00');
+        setText('silver-fin-revenue', fin['MTD Revenue'] || '$0.00');
+        setText('silver-fin-expenses', fin['MTD Expenses'] || '$0.00');
+        setText('silver-fin-invoices', fin['Pending Invoices'] || '0');
+
+        // Update queue counts
+        const counts = data.folder_counts || {};
+        renderQueueGrid(counts);
+
+        // Update overview queue grid
+        renderOverviewQueueGrid(counts);
+
+        // Update timestamp
+        const now = new Date();
+        setText('last-update', now.toLocaleTimeString());
+
+    } catch (err) {
+        console.error('Status fetch failed:', err);
+    }
+}
 
 // ============ Toast Notifications ============
 function showToast(message, type = 'info') {
@@ -198,30 +718,111 @@ async function fetchStatus() {
         const res = await fetch('/api/status');
         const data = await res.json();
 
-        // Update system status
+        // Update system status for both Bronze and Silver tier elements
         for (const [key, info] of Object.entries(data.system_status)) {
+            const label = info.status.charAt(0).toUpperCase() + info.status.slice(1);
+            const statusHtml = `<span class="status-dot"></span> ${label}`;
+
+            // Update regular status element if exists (Bronze tier)
             const badge = document.getElementById(`status-${key}`);
             const check = document.getElementById(`check-${key}`);
             if (badge) {
                 badge.className = `status-badge status-${info.status}`;
-                const label = info.status.charAt(0).toUpperCase() + info.status.slice(1);
-                badge.innerHTML = `<span class="status-dot"></span> ${label}`;
+                badge.innerHTML = statusHtml;
             }
             if (check) {
                 check.textContent = info.last_check || '--';
             }
+
+            // Update overview section elements
+            const overviewBadge = document.getElementById(`overview-status-${key}`);
+            const overviewCheck = document.getElementById(`overview-check-${key}`);
+            if (overviewBadge) {
+                overviewBadge.className = `status-badge status-${info.status}`;
+                overviewBadge.innerHTML = statusHtml;
+            }
+            if (overviewCheck) {
+                overviewCheck.textContent = info.last_check || '--';
+            }
+
+            // Update bronze section elements
+            const bronzeBadge = document.getElementById(`bronze-status-${key}`);
+            const bronzeCheck = document.getElementById(`bronze-check-${key}`);
+            if (bronzeBadge) {
+                bronzeBadge.className = `status-badge status-${info.status}`;
+                bronzeBadge.innerHTML = statusHtml;
+            }
+            if (bronzeCheck) {
+                bronzeCheck.textContent = info.last_check || '--';
+            }
+
+            // Also update Silver tier specific elements
+            // Define mapping for Silver tier element names
+            const silverElementMap = {
+                'watcher': 'filewatcher',
+                'gmail': 'gmailwatcher',
+                'whatsapp': 'whatsappwatcher',
+                'linkedin': 'linkedinwatcher',
+                'orchestrator': 'orchestrator-silver',
+                'claude': 'claude-silver'
+            };
+
+            const silverKeyName = silverElementMap[key] || `${key}watcher`;
+            const silverBadge = document.getElementById(`status-${silverKeyName}`);
+            const silverCheck = document.getElementById(`check-${silverKeyName}`);
+
+            if (silverBadge) {
+                silverBadge.className = `status-badge status-${info.status}`;
+                silverBadge.innerHTML = statusHtml;
+            }
+            if (silverCheck) {
+                silverCheck.textContent = info.last_check || '--';
+            }
+
+            // Also update Silver specific section elements
+            const silverSpecificBadge = document.getElementById(`silver-status-${silverKeyName}`);
+            const silverSpecificCheck = document.getElementById(`silver-check-${silverKeyName}`);
+
+            if (silverSpecificBadge) {
+                silverSpecificBadge.className = `status-badge status-${info.status}`;
+                silverSpecificBadge.innerHTML = statusHtml;
+            }
+            if (silverSpecificCheck) {
+                silverSpecificCheck.textContent = info.last_check || '--';
+            }
         }
 
-        // Update financial summary
+        // Update financial summary (all tiers)
         const fin = data.financial || {};
         setText('fin-balance', fin['Bank Balance'] || '$0.00');
         setText('fin-revenue', fin['MTD Revenue'] || '$0.00');
         setText('fin-expenses', fin['MTD Expenses'] || '$0.00');
         setText('fin-invoices', fin['Pending Invoices'] || '0');
 
-        // Update queue counts
+        // Update overview financial elements
+        setText('overview-fin-balance', fin['Bank Balance'] || '$0.00');
+        setText('overview-fin-revenue', fin['MTD Revenue'] || '$0.00');
+        setText('overview-fin-expenses', fin['MTD Expenses'] || '$0.00');
+        setText('overview-fin-invoices', fin['Pending Invoices'] || '0');
+
+        // Update bronze financial elements
+        setText('bronze-fin-balance', fin['Bank Balance'] || '$0.00');
+        setText('bronze-fin-revenue', fin['MTD Revenue'] || '$0.00');
+        setText('bronze-fin-expenses', fin['MTD Expenses'] || '$0.00');
+        setText('bronze-fin-invoices', fin['Pending Invoices'] || '0');
+
+        // Update silver financial elements
+        setText('silver-fin-balance', fin['Bank Balance'] || '$0.00');
+        setText('silver-fin-revenue', fin['MTD Revenue'] || '$0.00');
+        setText('silver-fin-expenses', fin['MTD Expenses'] || '$0.00');
+        setText('silver-fin-invoices', fin['Pending Invoices'] || '0');
+
+        // Update queue counts (both tiers)
         const counts = data.folder_counts || {};
         renderQueueGrid(counts);
+
+        // Update overview queue grid
+        renderOverviewQueueGrid(counts);
 
         // Update timestamp
         const now = new Date();
@@ -232,9 +833,9 @@ async function fetchStatus() {
     }
 }
 
-// ============ Queue Management ============
-function renderQueueGrid(counts) {
-    const grid = document.getElementById('queue-grid');
+// Render queue grid for overview section
+function renderOverviewQueueGrid(counts) {
+    const grid = document.getElementById('overview-queue-grid');
     let total = 0;
     let html = '';
 
@@ -243,14 +844,92 @@ function renderQueueGrid(counts) {
         total += count;
         const cls = count > 0 ? 'has-items' : 'empty';
         html += `
-            <div class="queue-item ${cls}" onclick="showQueueDetail('${folder}')">
+            <div class="queue-item ${cls}" onclick="showOverviewQueueDetail('${folder}')">
                 <div class="count">${count}</div>
                 <div class="folder-name">${folder.replace(/_/g, ' ')}</div>
             </div>`;
     }
 
     grid.innerHTML = html;
-    setText('queue-total', `${total} items`);
+    setText('overview-queue-total', `${total} items`);
+}
+
+// Show queue detail for overview section
+async function showOverviewQueueDetail(folder) {
+    try {
+        const res = await fetch(`/api/queue/${folder}`);
+        const data = await res.json();
+
+        setText('overview-queue-detail-title', folder.replace(/_/g, ' ') + ` (${data.count})`);
+
+        const list = document.getElementById('overview-queue-detail-list');
+        if (data.items.length === 0) {
+            list.innerHTML = '<div class="empty-state">Empty folder</div>';
+        } else {
+            list.innerHTML = data.items.map(item => `
+                <div class="file-item">
+                    <span class="file-name">${escapeHtml(item.name)}</span>
+                    <span class="file-meta">${formatSize(item.size)} &middot; ${formatDate(item.modified)}</span>
+                </div>`).join('');
+        }
+
+        document.getElementById('overview-queue-detail').classList.add('active');
+    } catch (err) {
+        console.error('Queue detail fetch failed:', err);
+    }
+}
+
+// Close overview queue detail
+function closeOverviewQueueDetail() {
+    document.getElementById('overview-queue-detail').classList.remove('active');
+}
+
+// ============ Queue Management ============
+function renderQueueGrid(counts) {
+    // Update the main queue grid (for bronze section)
+    const grid = document.getElementById('queue-grid');
+    if (grid) {
+        let total = 0;
+        let html = '';
+
+        for (const folder of WORKFLOW_FOLDERS) {
+            const count = counts[folder] || 0;
+            total += count;
+            const cls = count > 0 ? 'has-items' : 'empty';
+            html += `
+                <div class="queue-item ${cls}" onclick="showQueueDetail('${folder}')">
+                    <div class="count">${count}</div>
+                    <div class="folder-name">${folder.replace(/_/g, ' ')}</div>
+                </div>`;
+        }
+
+        grid.innerHTML = html;
+        setText('queue-total', `${total} items`);
+    }
+
+    // Update the bronze queue grid as well
+    const bronzeGrid = document.getElementById('bronze-queue-grid');
+    if (bronzeGrid) {
+        let total = 0;
+        let html = '';
+
+        for (const folder of WORKFLOW_FOLDERS) {
+            const count = counts[folder] || 0;
+            total += count;
+            const cls = count > 0 ? 'has-items' : 'empty';
+            html += `
+                <div class="queue-item ${cls}" onclick="showBronzeQueueDetail('${folder}')">
+                    <div class="count">${count}</div>
+                    <div class="folder-name">${folder.replace(/_/g, ' ')}</div>
+                </div>`;
+        }
+
+        bronzeGrid.innerHTML = html;
+        setText('bronze-queue-total', `${total} items`);
+    }
+
+    // Update the overview queue grid as well
+    renderOverviewQueueGrid(counts);
 }
 
 async function showQueueDetail(folder) {
@@ -277,8 +956,41 @@ async function showQueueDetail(folder) {
     }
 }
 
+async function showBronzeQueueDetail(folder) {
+    try {
+        const res = await fetch(`/api/queue/${folder}`);
+        const data = await res.json();
+
+        setText('bronze-queue-detail-title', folder.replace(/_/g, ' ') + ` (${data.count})`);
+
+        const list = document.getElementById('bronze-queue-detail-list');
+        if (data.items.length === 0) {
+            list.innerHTML = '<div class="empty-state">Empty folder</div>';
+        } else {
+            list.innerHTML = data.items.map(item => `
+                <div class="file-item">
+                    <span class="file-name">${escapeHtml(item.name)}</span>
+                    <span class="file-meta">${formatSize(item.size)} &middot; ${formatDate(item.modified)}</span>
+                </div>`).join('');
+        }
+
+        document.getElementById('bronze-queue-detail').classList.add('active');
+    } catch (err) {
+        console.error('Queue detail fetch failed:', err);
+    }
+}
+
 function closeQueueDetail() {
     document.getElementById('queue-detail').classList.remove('active');
+    document.getElementById('overview-queue-detail').classList.remove('active');
+}
+
+function closeBronzeQueueDetail() {
+    document.getElementById('bronze-queue-detail').classList.remove('active');
+}
+
+function closeBronzeQueueDetail() {
+    document.getElementById('bronze-queue-detail').classList.remove('active');
 }
 
 // ============ Approvals Panel ============
@@ -288,23 +1000,65 @@ async function fetchApprovals() {
         const data = await res.json();
 
         setText('approval-count', String(data.count));
-        const list = document.getElementById('approval-list');
+        setText('overview-approval-count', String(data.count));
+        setText('silver-approval-count', String(data.count));  // Also update silver section
 
-        if (data.items.length === 0) {
-            list.innerHTML = '<div class="empty-state">No items pending approval</div>';
-            return;
+        // Update main approval list
+        const list = document.getElementById('approval-list');
+        if (list) {
+            if (data.items.length === 0) {
+                list.innerHTML = '<div class="empty-state">No items pending approval</div>';
+            } else {
+                list.innerHTML = data.items.map(item => `
+                    <div class="approval-item">
+                        <div class="item-name">${escapeHtml(item.name)}</div>
+                        ${item.frontmatter ? `<div class="item-meta">Type: ${escapeHtml(item.frontmatter.type || 'unknown')} | Priority: ${escapeHtml(item.frontmatter.priority || 'medium')}</div>` : ''}
+                        ${item.preview ? `<div class="item-preview">${escapeHtml(item.preview)}</div>` : ''}
+                        <div class="approval-actions">
+                            <button class="btn btn-approve" onclick="approveItem('${escapeAttr(item.name)}')">Approve</button>
+                            <button class="btn btn-reject" onclick="rejectItem('${escapeAttr(item.name)}')">Reject</button>
+                        </div>
+                    </div>`).join('');
+            }
         }
 
-        list.innerHTML = data.items.map(item => `
-            <div class="approval-item">
-                <div class="item-name">${escapeHtml(item.name)}</div>
-                ${item.frontmatter ? `<div class="item-meta">Type: ${escapeHtml(item.frontmatter.type || 'unknown')} | Priority: ${escapeHtml(item.frontmatter.priority || 'medium')}</div>` : ''}
-                ${item.preview ? `<div class="item-preview">${escapeHtml(item.preview)}</div>` : ''}
-                <div class="approval-actions">
-                    <button class="btn btn-approve" onclick="approveItem('${escapeAttr(item.name)}')">Approve</button>
-                    <button class="btn btn-reject" onclick="rejectItem('${escapeAttr(item.name)}')">Reject</button>
-                </div>
-            </div>`).join('');
+        // Update overview approval list as well
+        const overviewList = document.getElementById('overview-approval-list');
+        if (overviewList) {
+            if (data.items.length === 0) {
+                overviewList.innerHTML = '<div class="empty-state">No items pending approval</div>';
+            } else {
+                overviewList.innerHTML = data.items.map(item => `
+                    <div class="approval-item">
+                        <div class="item-name">${escapeHtml(item.name)}</div>
+                        ${item.frontmatter ? `<div class="item-meta">Type: ${escapeHtml(item.frontmatter.type || 'unknown')} | Priority: ${escapeHtml(item.frontmatter.priority || 'medium')}</div>` : ''}
+                        ${item.preview ? `<div class="item-preview">${escapeHtml(item.preview)}</div>` : ''}
+                        <div class="approval-actions">
+                            <button class="btn btn-approve" onclick="approveItem('${escapeAttr(item.name)}')">Approve</button>
+                            <button class="btn btn-reject" onclick="rejectItem('${escapeAttr(item.name)}')">Reject</button>
+                        </div>
+                    </div>`).join('');
+            }
+        }
+
+        // Update silver approval list as well
+        const silverList = document.getElementById('silver-approval-list');
+        if (silverList) {
+            if (data.items.length === 0) {
+                silverList.innerHTML = '<div class="empty-state">No items pending approval</div>';
+            } else {
+                silverList.innerHTML = data.items.map(item => `
+                    <div class="approval-item">
+                        <div class="item-name">${escapeHtml(item.name)}</div>
+                        ${item.frontmatter ? `<div class="item-meta">Type: ${escapeHtml(item.frontmatter.type || 'unknown')} | Priority: ${escapeHtml(item.frontmatter.priority || 'medium')}</div>` : ''}
+                        ${item.preview ? `<div class="item-preview">${escapeHtml(item.preview)}</div>` : ''}
+                        <div class="approval-actions">
+                            <button class="btn btn-approve" onclick="approveItem('${escapeAttr(item.name)}')">Approve</button>
+                            <button class="btn btn-reject" onclick="rejectItem('${escapeAttr(item.name)}')">Reject</button>
+                        </div>
+                    </div>`).join('');
+            }
+        }
     } catch (err) {
         console.error('Approvals fetch failed:', err);
     }
@@ -347,25 +1101,84 @@ async function fetchPlans() {
         const data = await res.json();
 
         setText('plan-count', String(data.count));
+        setText('overview-plan-count', String(data.count));
+        setText('silver-plan-count', String(data.count));  // Also update silver section
+
+        // Update main plan list
         const list = document.getElementById('plan-list');
         const preview = document.getElementById('plan-preview');
+        if (list) {
+            if (data.plans.length === 0) {
+                list.innerHTML = '<div class="empty-state">No plans created yet</div>';
+                preview.classList.remove('active');
+            } else {
+                list.innerHTML = data.plans.map((plan, i) => `
+                    <div class="plan-item" onclick="showPlanPreview(${i})" data-index="${i}">
+                        <div class="plan-name">${escapeHtml(plan.name)}</div>
+                        <div class="plan-meta">${formatDate(plan.modified)}${plan.frontmatter.status ? ' | ' + escapeHtml(plan.frontmatter.status) : ''}</div>
+                    </div>`).join('');
 
-        if (data.plans.length === 0) {
-            list.innerHTML = '<div class="empty-state">No plans created yet</div>';
-            preview.classList.remove('active');
-            return;
+                // Store plans data for main preview
+                window._plans = data.plans;
+            }
         }
 
-        list.innerHTML = data.plans.map((plan, i) => `
-            <div class="plan-item" onclick="showPlanPreview(${i})" data-index="${i}">
-                <div class="plan-name">${escapeHtml(plan.name)}</div>
-                <div class="plan-meta">${formatDate(plan.modified)}${plan.frontmatter.status ? ' | ' + escapeHtml(plan.frontmatter.status) : ''}</div>
-            </div>`).join('');
+        // Update overview plan list
+        const overviewList = document.getElementById('overview-plan-list');
+        const overviewPreview = document.getElementById('overview-plan-preview');
+        if (overviewList) {
+            if (data.plans.length === 0) {
+                overviewList.innerHTML = '<div class="empty-state">No plans created yet</div>';
+                overviewPreview.classList.remove('active');
+            } else {
+                overviewList.innerHTML = data.plans.map((plan, i) => `
+                    <div class="plan-item" onclick="showOverviewPlanPreview(${i})" data-index="${i}">
+                        <div class="plan-name">${escapeHtml(plan.name)}</div>
+                        <div class="plan-meta">${formatDate(plan.modified)}${plan.frontmatter.status ? ' | ' + escapeHtml(plan.frontmatter.status) : ''}</div>
+                    </div>`).join('');
 
-        // Store plans data for preview
-        window._plans = data.plans;
+                // Store plans data for overview preview
+                window._overviewPlans = data.plans;
+            }
+        }
+
+        // Update silver plan list
+        const silverList = document.getElementById('silver-plan-list');
+        const silverPreview = document.getElementById('silver-plan-preview');
+        if (silverList) {
+            if (data.plans.length === 0) {
+                silverList.innerHTML = '<div class="empty-state">No plans created yet</div>';
+                silverPreview.classList.remove('active');
+            } else {
+                silverList.innerHTML = data.plans.map((plan, i) => `
+                    <div class="plan-item" onclick="showSilverPlanPreview(${i})" data-index="${i}">
+                        <div class="plan-name">${escapeHtml(plan.name)}</div>
+                        <div class="plan-meta">${formatDate(plan.modified)}${plan.frontmatter.status ? ' | ' + escapeHtml(plan.frontmatter.status) : ''}</div>
+                    </div>`).join('');
+
+                // Store plans data for silver preview
+                window._silverPlans = data.plans;
+            }
+        }
     } catch (err) {
         console.error('Plans fetch failed:', err);
+    }
+}
+
+// Show plan preview for overview section
+function showOverviewPlanPreview(index) {
+    const plan = window._overviewPlans && window._overviewPlans[index];
+    if (!plan) return;
+
+    const preview = document.getElementById('overview-plan-preview');
+    if (preview) {
+        preview.textContent = plan.preview || '(no content)';
+        preview.classList.add('active');
+
+        // Highlight active plan
+        document.querySelectorAll('.plan-item').forEach(el => el.classList.remove('active'));
+        const item = document.querySelector(`.plan-item[data-index="${index}"]`);
+        if (item) item.classList.add('active');
     }
 }
 
@@ -374,6 +1187,20 @@ function showPlanPreview(index) {
     if (!plan) return;
 
     const preview = document.getElementById('plan-preview');
+    preview.textContent = plan.preview || '(no content)';
+    preview.classList.add('active');
+
+    // Highlight active plan
+    document.querySelectorAll('.plan-item').forEach(el => el.classList.remove('active'));
+    const item = document.querySelector(`.plan-item[data-index="${index}"]`);
+    if (item) item.classList.add('active');
+}
+
+function showSilverPlanPreview(index) {
+    const plan = window._silverPlans && window._silverPlans[index];
+    if (!plan) return;
+
+    const preview = document.getElementById('silver-plan-preview');
     preview.textContent = plan.preview || '(no content)';
     preview.classList.add('active');
 
@@ -395,17 +1222,46 @@ async function fetchGoals() {
         const pct = Math.min(100, Math.round((current / target) * 100));
 
         setText('goals-revenue-text', `${data.current_mtd || '$0'} / ${data.revenue_target || '$10,000'}`);
-        document.getElementById('goals-revenue-bar').style.width = pct + '%';
+        setText('overview-goals-revenue-text', `${data.current_mtd || '$0'} / ${data.revenue_target || '$10,000'}`);
+        setText('silver-goals-revenue-text', `${data.current_mtd || '$0'} / ${data.revenue_target || '$10,000'}`);
+
+        const revenueBar = document.getElementById('goals-revenue-bar');
+        if (revenueBar) {
+            revenueBar.style.width = pct + '%';
+        }
+
+        const overviewRevenueBar = document.getElementById('overview-goals-revenue-bar');
+        if (overviewRevenueBar) {
+            overviewRevenueBar.style.width = pct + '%';
+        }
+
+        const silverRevenueBar = document.getElementById('silver-goals-revenue-bar');
+        if (silverRevenueBar) {
+            silverRevenueBar.style.width = pct + '%';
+        }
 
         // Key metrics
         const metricsGrid = document.getElementById('goals-metrics');
+        const overviewMetricsGrid = document.getElementById('overview-goals-metrics');
+        const silverMetricsGrid = document.getElementById('silver-goals-metrics');
+
         const metrics = data.metrics || [];
-        if (metrics.length > 0) {
-            metricsGrid.innerHTML = metrics.map(m => `
-                <div class="metric-item">
-                    <div class="metric-name">${escapeHtml(m.metric)}</div>
-                    <div class="metric-target">${escapeHtml(m.target)}</div>
-                </div>`).join('');
+        const metricsHtml = metrics.map(m => `
+            <div class="metric-item">
+                <div class="metric-name">${escapeHtml(m.metric)}</div>
+                <div class="metric-target">${escapeHtml(m.target)}</div>
+            </div>`).join('');
+
+        if (metricsGrid && metrics.length > 0) {
+            metricsGrid.innerHTML = metricsHtml;
+        }
+
+        if (overviewMetricsGrid && metrics.length > 0) {
+            overviewMetricsGrid.innerHTML = metricsHtml;
+        }
+
+        if (silverMetricsGrid && metrics.length > 0) {
+            silverMetricsGrid.innerHTML = metricsHtml;
         }
     } catch (err) {
         console.error('Goals fetch failed:', err);
@@ -419,25 +1275,71 @@ async function fetchLogs() {
         const data = await res.json();
 
         setText('log-count', String(data.count));
-        const body = document.getElementById('log-body');
+        setText('overview-log-count', String(data.count));
+        setText('bronze-log-count', String(data.count));
 
-        if (data.logs.length === 0) {
-            body.innerHTML = '<tr><td colspan="4" class="empty-state">No log entries</td></tr>';
-            return;
+        // Update main log body
+        const body = document.getElementById('log-body');
+        if (body) {
+            if (data.logs.length === 0) {
+                body.innerHTML = '<tr><td colspan="4" class="empty-state">No log entries</td></tr>';
+            } else {
+                body.innerHTML = data.logs.map(log => {
+                    const details = typeof log.details === 'object'
+                        ? Object.entries(log.details).map(([k,v]) => `${k}: ${v}`).join(', ')
+                        : String(log.details || '');
+                    return `
+                        <tr>
+                            <td class="timestamp">${formatTimestamp(log.timestamp)}</td>
+                            <td class="actor">${escapeHtml(log.actor || log.watcher || '--')}</td>
+                            <td class="action-type">${escapeHtml(log.action_type || '--')}</td>
+                            <td class="details" title="${escapeAttr(details)}">${escapeHtml(details)}</td>
+                        </tr>`;
+                }).join('');
+            }
         }
 
-        body.innerHTML = data.logs.map(log => {
-            const details = typeof log.details === 'object'
-                ? Object.entries(log.details).map(([k,v]) => `${k}: ${v}`).join(', ')
-                : String(log.details || '');
-            return `
-                <tr>
-                    <td class="timestamp">${formatTimestamp(log.timestamp)}</td>
-                    <td class="actor">${escapeHtml(log.actor || log.watcher || '--')}</td>
-                    <td class="action-type">${escapeHtml(log.action_type || '--')}</td>
-                    <td class="details" title="${escapeAttr(details)}">${escapeHtml(details)}</td>
-                </tr>`;
-        }).join('');
+        // Update overview log body
+        const overviewBody = document.getElementById('overview-log-body');
+        if (overviewBody) {
+            if (data.logs.length === 0) {
+                overviewBody.innerHTML = '<tr><td colspan="4" class="empty-state">No log entries</td></tr>';
+            } else {
+                overviewBody.innerHTML = data.logs.map(log => {
+                    const details = typeof log.details === 'object'
+                        ? Object.entries(log.details).map(([k,v]) => `${k}: ${v}`).join(', ')
+                        : String(log.details || '');
+                    return `
+                        <tr>
+                            <td class="timestamp">${formatTimestamp(log.timestamp)}</td>
+                            <td class="actor">${escapeHtml(log.actor || log.watcher || '--')}</td>
+                            <td class="action-type">${escapeHtml(log.action_type || '--')}</td>
+                            <td class="details" title="${escapeAttr(details)}">${escapeHtml(details)}</td>
+                        </tr>`;
+                }).join('');
+            }
+        }
+
+        // Update bronze log body
+        const bronzeBody = document.getElementById('bronze-log-body');
+        if (bronzeBody) {
+            if (data.logs.length === 0) {
+                bronzeBody.innerHTML = '<tr><td colspan="4" class="empty-state">No log entries</td></tr>';
+            } else {
+                bronzeBody.innerHTML = data.logs.map(log => {
+                    const details = typeof log.details === 'object'
+                        ? Object.entries(log.details).map(([k,v]) => `${k}: ${v}`).join(', ')
+                        : String(log.details || '');
+                    return `
+                        <tr>
+                            <td class="timestamp">${formatTimestamp(log.timestamp)}</td>
+                            <td class="actor">${escapeHtml(log.actor || log.watcher || '--')}</td>
+                            <td class="action-type">${escapeHtml(log.action_type || '--')}</td>
+                            <td class="details" title="${escapeAttr(details)}">${escapeHtml(details)}</td>
+                        </tr>`;
+                }).join('');
+            }
+        }
     } catch (err) {
         console.error('Logs fetch failed:', err);
     }
@@ -522,13 +1424,56 @@ function formatTimestamp(ts) {
 
 // ============ Refresh Loop ============
 async function refreshAll() {
-    await Promise.all([
-        fetchStatus(),
-        fetchApprovals(),
-        fetchPlans(),
-        fetchGoals(),
-        fetchLogs(),
-    ]);
+    if (currentView === 'overview') {
+        // If on overview, refresh all data
+        await Promise.all([
+            fetchStatus(),
+            fetchApprovals(),
+            fetchPlans(),
+            fetchGoals(),
+            fetchLogs(),
+        ]);
+    } else {
+        // Otherwise, only refresh the relevant data for the current view
+        switch(currentView) {
+            case 'bronze-status':
+                await fetchStatus();
+                break;
+            case 'bronze-queue':
+                await fetchStatus();
+                break;
+            case 'silver-status':
+                await fetchEnhancedStatus();
+                break;
+            case 'silver-approvals':
+                await fetchApprovals();
+                break;
+            case 'silver-plans':
+                await fetchPlans();
+                break;
+            case 'silver-financial':
+                await fetchStatus();
+                break;
+            case 'silver-goals':
+                await fetchGoals();
+                break;
+            case 'bronze-logs':
+                await fetchLogs();
+                break;
+            case 'controls':
+                await fetchStatus();
+                break;
+            default:
+                // On overview or other views, refresh all
+                await Promise.all([
+                    fetchStatus(),
+                    fetchApprovals(),
+                    fetchPlans(),
+                    fetchGoals(),
+                    fetchLogs(),
+                ]);
+        }
+    }
 }
 
 // Initial load

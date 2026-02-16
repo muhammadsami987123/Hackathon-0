@@ -2,3 +2,8 @@ watchdog>=4.0.0
 python-dotenv>=1.0.0
 flask>=3.0.0
 pyyaml>=6.0
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+playwright

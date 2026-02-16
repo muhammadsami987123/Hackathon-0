@@ -1,0 +1,20 @@
+{
+  "name": "email-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for sending emails as part of the AI Employee project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.1.0",
+    "nodemailer": "^6.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "keywords": ["mcp", "email", "ai-employee"],
+  "author": "AI Employee Project",
+  "license": "MIT"
+}

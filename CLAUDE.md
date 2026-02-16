@@ -1,7 +1,7 @@
 # AI Employee Project - Claude Code Instructions
 
 ## Project Overview
-This is a Bronze Tier Digital FTE (Full-Time Equivalent) - an autonomous AI Employee built with Claude Code and Obsidian.
+This is a Silver Tier: Functional Assistant Digital FTE (Full-Time Equivalent) - an autonomous AI Employee built with Claude Code and Obsidian.
 
 ## Key Paths
 - **Vault**: `./AI_Employee_Vault/`

@@ -1,6 +1,6 @@
-# AI Employee Vault
+# AI Employee Vault - Silver Tier: Functional Assistant
 
-An autonomous AI Employee system (Bronze Tier Digital FTE) built with Claude Code and Obsidian. The vault serves as both the long-term memory and the central nervous system for the AI Employee, managing tasks, finances, communications, and business operations through a file-based workflow.
+An autonomous AI Employee system (Silver Tier Digital FTE) built with Claude Code and Obsidian. The vault serves as both the long-term memory and the central nervous system for the AI Employee, managing tasks, finances, communications, and business operations through a file-based workflow. Enhanced with multiple watchers, MCP servers, and human-in-the-loop approval workflows.
 
 ## Quick Start
 
@@ -16,11 +16,14 @@ python dashboard/app.py --port 5000
 
 ## Architecture
 
-The system operates on a **file-based workflow** pattern. Markdown files with YAML frontmatter move through folders representing workflow states. Three core components work together:
+The system operates on a **file-based workflow** pattern. Markdown files with YAML frontmatter move through folders representing workflow states. The Silver Tier implementation includes multiple components working together:
 
-- **File System Watcher** — Monitors the vault for new/changed files and logs events
+- **Multiple Watchers** — Monitor external sources including: File system, Gmail, WhatsApp, and LinkedIn
 - **Orchestrator** — Claims tasks from `Needs_Action/`, creates plans, and invokes Claude Code
+- **MCP Servers** — Execute external actions (e.g., sending emails) with human approval when needed
 - **Web Dashboard** — Real-time Nerve Center UI at `localhost:5000` with auto-refresh
+- **Skills System** — Agent-based functionality for specialized tasks (LinkedIn posting, scheduling, etc.)
+- **Human-in-the-Loop** — Approval workflows for sensitive actions in `/Pending_Approval/`
 
 ## Vault Structure
 
@@ -50,6 +53,9 @@ AI_Employee_Vault/
 ├── scripts/                 # Python automation scripts
 │   ├── base_watcher.py      # Base class for file watchers
 │   ├── filesystem_watcher.py # Monitors vault for file changes
+│   ├── gmail_watcher.py     # Monitors Gmail for new messages
+│   ├── whatsapp_watcher.py  # Monitors WhatsApp Web for messages
+│   ├── linkedin_watcher.py  # Monitors LinkedIn for messages and connections
 │   ├── orchestrator.py      # Claims and processes tasks autonomously
 │   ├── test_pipeline.py     # End-to-end pipeline tests
 │   └── requirements.txt     # Python dependencies
@@ -63,16 +69,24 @@ AI_Employee_Vault/
         └── style.css        # Dark theme CSS
 ```
 
-## Workflow
+## Silver Tier Workflow
 
-The AI Employee follows a **claim-by-move** pattern:
+The AI Employee follows a **claim-by-move** pattern with enhanced approval workflows:
 
 ```
+External Sources (Gmail, WhatsApp, LinkedIn, Files) -->
 Inbox/ --> Needs_Action/ --> In_Progress/ --> Done/
                                 |
-                                +--> Pending_Approval/ --> Approved/
+                                +--> Pending_Approval/ --> Approved/ --> MCP Action
                                                       --> Rejected/
 ```
+
+### New Silver Tier Capabilities:
+- **Multi-Source Monitoring**: Watchers monitor Gmail, WhatsApp, LinkedIn, and file system
+- **MCP Integration**: Email MCP server handles external actions like sending emails
+- **LinkedIn Automation**: Automated posting for business generation (with approval)
+- **Scheduling System**: Automated recurring tasks and reports
+- **Enhanced Skills**: Specialized agent skills for different tasks
 
 1. Files arrive in `Inbox/` (manually or via integrations)
 2. The **Watcher** detects new files and moves them to `Needs_Action/`
@@ -128,11 +142,22 @@ The dashboard at `http://localhost:5000` provides 8 panels:
 
 ## Dependencies
 
+### Python Dependencies
 ```
 watchdog>=4.0.0     # File system monitoring
 python-dotenv>=1.0.0 # Environment configuration
 flask>=3.0.0        # Web dashboard server
 pyyaml>=6.0         # YAML frontmatter parsing
+google-auth          # Gmail API authentication
+google-auth-oauthlib # Gmail OAuth
+google-api-python-client # Gmail API client
+playwright           # Browser automation for WhatsApp/LinkedIn
+```
+
+### Node.js Dependencies (MCP Servers)
+```
+@modelcontextprotocol/sdk # MCP server framework
+nodemailer               # Email sending
 ```
 
 ## File Format
@@ -164,18 +189,97 @@ Audit logs use JSON arrays in `Logs/YYYY-MM-DD.json`:
 ]
 ```
 
-## Running Components Individually
+## Running: Bronze Tier vs Silver Tier
+
+### Bronze Tier: Foundation Setup
+The Bronze Tier provides the core AI Employee functionality with file system monitoring:
 
 ```bash
-# File System Watcher only
-python scripts/filesystem_watcher.py --vault-path .
+# 1. Install basic dependencies
+pip install -r scripts/requirements.txt
 
-# Orchestrator only
+# 2. Start the core components
+python scripts/filesystem_watcher.py --vault-path .
 python scripts/orchestrator.py --vault-path . --interval 10
 
-# Dashboard only
-python dashboard/app.py --port 5000 --debug
+# 3. Start the web dashboard to monitor activity
+python dashboard/app.py --port 5000
+# Open http://localhost:5000 to see the dashboard
 
-# All via dashboard controls
+# 4. Or use the dashboard controls
 # Click "Start All" in the Controls panel at http://localhost:5000
 ```
+
+### Silver Tier: Functional Assistant
+The Silver Tier adds multiple watchers, MCP servers, and LinkedIn automation:
+
+```bash
+# 1. Install all dependencies (Bronze + Silver)
+pip install -r scripts/requirements.txt
+cd mcp-servers/email-mcp && npm install
+
+# 2. Install Playwright browsers (for WhatsApp/LinkedIn)
+playwright install
+
+# 3. Set up MCP server credentials (copy and configure)
+cp mcp-servers/email-mcp/.env.example mcp-servers/email-mcp/.env
+# Update .env with your email credentials
+
+# 4. Start Bronze Tier components (minimum requirement)
+python scripts/orchestrator.py --vault-path . --interval 10
+python dashboard/app.py --port 5000
+
+# 5. Start Silver Tier watchers (choose based on your needs)
+# File System Watcher (always recommended)
+python scripts/filesystem_watcher.py --vault-path .
+
+# Gmail Watcher (requires Gmail API setup)
+python scripts/gmail_watcher.py --vault-path .
+
+# WhatsApp Watcher (requires browser login - run with --no-headless first)
+python scripts/whatsapp_watcher.py --vault-path . --no-headless  # For initial login
+# Then for regular use (after login):
+python scripts/whatsapp_watcher.py --vault-path .
+
+# LinkedIn Watcher (requires browser login - run with --no-headless first)
+python scripts/linkedin_watcher.py --vault-path . --no-headless  # For initial login
+# Then for regular use (after login):
+python scripts/linkedin_watcher.py --vault-path .
+
+# 6. Start MCP Server for email capabilities
+cd mcp-servers/email-mcp && npm start
+
+# 7. Monitor Dashboard.md and /Pending_Approval/ for human review items
+```
+
+### Quick Start: Complete Silver Tier
+For a complete Silver Tier setup:
+
+```bash
+# 1. Install dependencies
+pip install -r scripts/requirements.txt
+cd mcp-servers/email-mcp && npm install && cd ../..
+playwright install
+
+# 2. Configure MCP server (optional but recommended)
+cp mcp-servers/email-mcp/.env.example mcp-servers/email-mcp/.env
+
+# 3. Start all core components
+python scripts/orchestrator.py --vault-path . &
+python dashboard/app.py --port 5000 &
+
+# 4. Start all watchers (after initial browser logins if needed)
+python scripts/filesystem_watcher.py --vault-path . &
+python scripts/gmail_watcher.py --vault-path . &
+# For WhatsApp/LinkedIn, first run with --no-headless to log in manually:
+# python scripts/whatsapp_watcher.py --vault-path . --no-headless
+# python scripts/linkedin_watcher.py --vault-path . --no-headless
+
+# 5. MCP Server (in separate terminal)
+cd mcp-servers/email-mcp && npm start
+```
+
+### Web Dashboard Usage
+The dashboard at `http://localhost:5000` provides real-time monitoring for both tiers:
+- **Bronze Tier**: Monitor basic system status, queue management, and activity logs
+- **Silver Tier**: Additional panels for pending approvals, enhanced queue management across all 7 folders, and monitoring of all active watchers
